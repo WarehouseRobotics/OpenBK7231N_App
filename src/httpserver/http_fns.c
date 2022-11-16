@@ -202,7 +202,7 @@ int http_fn_testmsg(http_request_t* request) {
 }
 
 int http_fn_json_data(http_request_t* request) {
-	http_setup((request, httpMimeTypeJson));
+	http_setup(request, httpMimeTypeJson);
 
 	//DRV_AppendInformationToHTTPIndexPage(request);
 	DRV_JsonData(request);
