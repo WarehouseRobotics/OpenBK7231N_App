@@ -199,7 +199,16 @@ int http_fn_testmsg(http_request_t* request) {
 	poststr(request, "This is just a test msg\n\n");
 	poststr(request, NULL);
 	return 0;
+}
 
+int http_fn_json_data(http_request_t* request) {
+	http_setup((request, httpMimeTypeJson));
+
+	//DRV_AppendInformationToHTTPIndexPage(request);
+	DRV_JsonData(request);
+
+	poststr(request, NULL);
+	return 0;
 }
 
 int http_fn_index(http_request_t* request) {
@@ -2185,7 +2194,7 @@ int http_fn_cfg(http_request_t* request) {
 		hprintf255(request, "BK_PARTITION_RF_FIRMWARE: bOk %i, at %i, len %i<br>", k, i, j);
 		k = config_get_tableOffsets(BK_PARTITION_OTA, &i, &j);
 		hprintf255(request, "BK_PARTITION_OTA: bOk %i, at %i, len %i<br>", k, i, j);
-	}
+}
 #endif
 #endif
 	poststr(request, htmlFooterReturnToMenu);

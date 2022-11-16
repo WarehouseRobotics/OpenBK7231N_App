@@ -628,9 +628,11 @@ int HTTP_ProcessPacket(http_request_t* request) {
 			}
 		}
 	}
+
 	if (http_checkUrlBase(urlStr, "")) return http_fn_empty_url(request);
 
 	if (http_checkUrlBase(urlStr, "testmsg")) return http_fn_testmsg(request);
+	if (http_checkUrlBase(urlStr, "json")) return http_fn_json_data(request);
 	if (http_checkUrlBase(urlStr, "index")) return http_fn_index(request);
 
 	if (http_checkUrlBase(urlStr, "about")) return http_fn_about(request);

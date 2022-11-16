@@ -22,6 +22,7 @@ int http_fn_ha_discovery(http_request_t* request);
 int http_fn_cfg(http_request_t* request);
 int http_fn_cfg_pins(http_request_t* request);
 int http_fn_cfg_ping(http_request_t* request);
+int http_fn_json_data(http_request_t* request);
 int http_fn_index(http_request_t* request);
 int http_fn_testmsg(http_request_t* request);
 int http_fn_ota_exec(http_request_t* request);

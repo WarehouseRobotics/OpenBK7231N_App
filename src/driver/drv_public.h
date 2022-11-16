@@ -14,10 +14,10 @@ enum {
 	OBK_CONSUMPTION_TOTAL = OBK_NUM_MEASUREMENTS,
 	OBK_CONSUMPTION_LAST_HOUR,
 	OBK_CONSUMPTION_STATS,
-    OBK_CONSUMPTION_YESTERDAY,
-    OBK_CONSUMPTION_TODAY,
-    OBK_CONSUMPTION_CLEAR_DATE,
-    OBK_NUM_EMUNS_MAX
+	OBK_CONSUMPTION_YESTERDAY,
+	OBK_CONSUMPTION_TODAY,
+	OBK_CONSUMPTION_CLEAR_DATE,
+	OBK_NUM_EMUNS_MAX
 };
 
 #define OBK_NUM_COUNTERS            (OBK_NUM_EMUNS_MAX-OBK_NUM_MEASUREMENTS)
@@ -31,6 +31,7 @@ extern const char* counter_mqttNames[];
 extern const char* counter_devClasses[];
 
 void DRV_Generic_Init();
+void DRV_JsonData(http_request_t* request);
 void DRV_AppendInformationToHTTPIndexPage(http_request_t* request);
 void DRV_OnEverySecond();
 void DRV_RunQuickTick();
