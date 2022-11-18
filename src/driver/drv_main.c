@@ -56,7 +56,7 @@ typedef struct driver_s {
 	void (*initFunc)();
 	void (*onEverySecond)();
 	void (*appendInformationToHTTPIndexPage)(http_request_t* request);
-	void (*jsonData)(http_request_t* request);
+	void (*jsonData)(http_request_t* request); // MU: test
 	void (*runQuickTick)();
 	void (*stopFunc)();
 	void (*onChannelChanged)(int ch, int val);
@@ -249,6 +249,7 @@ void DRV_Generic_Init() {
 	CMD_RegisterCommand("stopDriver", "", DRV_Stop, "Stops driver", NULL);
 }
 
+// MU: test
 void DRV_JsonData(http_request_t* request) {
 	for (int i = 0; i < g_numDrivers; i++) {
 		if (g_drivers[i].bLoaded) {

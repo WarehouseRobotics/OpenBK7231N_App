@@ -1238,7 +1238,7 @@ int HTTPClient_Async_SendGet(const char* url_in) {
 	return 0;
 }
 
-int HTTPClient_Async_SendGetWithHeader(const char* url_in, const char* header) {
+int HTTPClient_Async_SendGetWithAuth(const char* url_in, const char* username, const char* password) {
 	httprequest_t* request;
 	httpclient_t* client;
 	httpclient_data_t* client_data;
@@ -1277,8 +1277,8 @@ int HTTPClient_Async_SendGetWithHeader(const char* url_in, const char* header) {
 
 	client_data->response_buf = 0;  //Sets a buffer to store the result.
 	client_data->response_buf_len = 0;  //Sets the buffer size.
-	HTTPClient_SetCustomHeader(client, header);  //Sets the custom header if needed.
-	httpclient_basic_auth(client, "testuser", "testpass");
+	//HTTPClient_SetCustomHeader(client, "");  //Sets the custom header if needed.
+	httpclient_basic_auth(client, username, password);
 	client_data->post_buf = "";  //Sets the user data to be posted.
 	client_data->post_buf_len = 0;  //Sets the post data length.
 	client_data->post_content_type = "text/csv";  //Sets the content type.
@@ -1288,7 +1288,6 @@ int HTTPClient_Async_SendGetWithHeader(const char* url_in, const char* header) {
 	request->method = HTTPCLIENT_GET;
 	request->timeout = 10000;
 	HTTPClient_Async_SendGeneric(request);
-
 
 	return 0;
 }

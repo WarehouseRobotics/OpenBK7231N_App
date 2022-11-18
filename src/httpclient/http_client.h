@@ -150,7 +150,7 @@ typedef struct httprequest_t_tag{
  */
 int HTTPClient_Async_SendGeneric(httprequest_t *request);
 int HTTPClient_Async_SendGet(const char *url_in);
-int HTTPClient_Async_SendGetWithHeader(const char* url_in, const char* header);
+int HTTPClient_Async_SendGetWithAuth(const char* url_in, const char* username, const char *password);
 void HTTPClient_SetCustomHeader(httpclient_t *client, const char *header);
 
 #ifdef __cplusplus

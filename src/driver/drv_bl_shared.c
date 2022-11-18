@@ -69,6 +69,7 @@ int changeSendThresholds[OBK_NUM_MEASUREMENTS] = {
 int changeSendAlwaysFrames = 60;
 int changeDoNotSendMinFrames = 5;
 
+// MU: test
 void BL09XX_JsonData(http_request_t* request) {
 	hprintf255(request, "{'Voltage': %.2f, 'Current': %.2f}", lastReadings[OBK_VOLTAGE], lastReadings[OBK_CURRENT]);
 }

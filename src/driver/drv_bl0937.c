@@ -295,7 +295,10 @@ void BL0937_RunFrame()
 #endif
 	BL_ProcessUpdate(final_v, final_c, final_p);
 
+	char url[256];
+	snprintf(url, sizeof(url), "https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?Voltage=%.2f,Current=%.2f,Power=%.2f,UpTimeSec=%d",
+		final_v, final_c, final_p, Time_getUpTimeSeconds());
 
-	HTTPClient_Async_SendGetWithHeader("https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?test", "");
+	HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
 }
 
