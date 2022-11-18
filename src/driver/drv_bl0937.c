@@ -295,6 +295,7 @@ void BL0937_RunFrame()
 #endif
 	BL_ProcessUpdate(final_v, final_c, final_p);
 
-	HTTPClient_Async_SendGet("https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?test");
+
+	HTTPClient_Async_SendGetWithHeader("https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?test", "Authorization: Basic ZGVtbzpwQDU1dzByZA==");
 }
 
