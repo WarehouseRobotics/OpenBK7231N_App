@@ -1278,6 +1278,7 @@ int HTTPClient_Async_SendGetWithHeader(const char* url_in, const char* header) {
 	client_data->response_buf = 0;  //Sets a buffer to store the result.
 	client_data->response_buf_len = 0;  //Sets the buffer size.
 	HTTPClient_SetCustomHeader(client, header);  //Sets the custom header if needed.
+	httpclient_basic_auth(client, "testuser", "testpass");
 	client_data->post_buf = "";  //Sets the user data to be posted.
 	client_data->post_buf_len = 0;  //Sets the post data length.
 	client_data->post_content_type = "text/csv";  //Sets the content type.
