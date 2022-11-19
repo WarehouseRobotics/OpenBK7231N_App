@@ -304,7 +304,7 @@ void BL0937_RunFrame()
 	//HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
 
 	char postData[1024];
-	snprintf(postdata, sizeof(postData), "Voltage=%.2f&Current=%.2f&Power=%.2f&UpTimeSec=%d&Drv=%s&Chipset=%s&DeviceName=%s",
+	snprintf(postData, sizeof(postData), "Voltage=%.2f&Current=%.2f&Power=%.2f&UpTimeSec=%d&Drv=%s&Chipset=%s&DeviceName=%s",
 		final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName);
 	HTTPClient_Async_SendPostWithAuth("https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164", postData, "testuser", "testpass");
 }
