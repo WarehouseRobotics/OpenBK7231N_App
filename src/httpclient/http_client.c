@@ -1292,7 +1292,7 @@ int HTTPClient_Async_SendGetWithAuth(const char* url_in, const char* username, c
 	return 0;
 }
 
-int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* post_data, const char* username, const char* password) {
+int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* json_data, const char* username, const char* password) {
 	httprequest_t* request;
 	httpclient_t* client;
 	httpclient_data_t* client_data;
@@ -1333,9 +1333,9 @@ int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* post_data,
 	client_data->response_buf_len = 0;  //Sets the buffer size.
 	//HTTPClient_SetCustomHeader(client, "");  //Sets the custom header if needed.
 	httpclient_basic_auth(client, username, password);
-	client_data->post_buf = post_data;  //Sets the user data to be posted.
-	client_data->post_buf_len = strlen(post_data);  //Sets the post data length.
-	client_data->post_content_type = "text/csv";  //Sets the content type.
+	client_data->post_buf = json_data;  //Sets the user data to be posted.
+	client_data->post_buf_len = strlen(json_data);  //Sets the post data length.
+	client_data->post_content_type = "application/json";  //Sets the content type.
 	request->data_callback = 0;
 	request->port = 80;//HTTP_PORT;
 	request->url = url;

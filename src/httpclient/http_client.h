@@ -151,7 +151,7 @@ extern "C" {
 	int HTTPClient_Async_SendGeneric(httprequest_t* request);
 	int HTTPClient_Async_SendGet(const char* url_in);
 	int HTTPClient_Async_SendGetWithAuth(const char* url_in, const char* username, const char* password);
-	int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* post_data, const char* username, const char* password);
+	int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* json_data, const char* username, const char* password);
 	void HTTPClient_SetCustomHeader(httpclient_t* client, const char* header);
 
 #ifdef __cplusplus
