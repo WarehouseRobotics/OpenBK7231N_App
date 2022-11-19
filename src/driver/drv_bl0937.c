@@ -298,8 +298,8 @@ void BL0937_RunFrame()
 	char url[256];
 	//&MacAddr=%02X:%02X:%02X:%02X:%02X:%02X
 	//, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]
-	snprintf(url, sizeof(url), "https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?Voltage=%.2f&Current=%.2f&Power=%.2f&UpTimeSec=%d&Drv=%s&Chipset=%s&DeviceName=%s",
-		final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName);
+	snprintf(url, sizeof(url), "https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?DeviceName=%s",
+		g_cfg.longDeviceName);
 
 	HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
 }
