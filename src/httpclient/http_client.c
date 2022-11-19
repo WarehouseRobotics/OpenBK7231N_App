@@ -1334,7 +1334,7 @@ int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* post_data,
 	//HTTPClient_SetCustomHeader(client, "");  //Sets the custom header if needed.
 	httpclient_basic_auth(client, username, password);
 	client_data->post_buf = post_data;  //Sets the user data to be posted.
-	client_data->post_buf_len = sizeof(post_data);  //Sets the post data length.
+	client_data->post_buf_len = strlen(post_data);  //Sets the post data length.
 	client_data->post_content_type = "text/csv";  //Sets the content type.
 	request->data_callback = 0;
 	request->port = 80;//HTTP_PORT;
