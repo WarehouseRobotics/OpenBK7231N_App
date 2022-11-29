@@ -47,7 +47,9 @@ float last_p = 0.0f;
 volatile uint32_t g_vc_pulses = 0;
 volatile uint32_t g_p_pulses = 0;
 static portTickType pulseStamp;
-static uint32_t secondsSkipped = 0;
+
+#define DATA_SEND_PERIOD_SEC 600
+static uint32_t secondsSkipped = DATA_SEND_PERIOD_SEC;
 
 void HlwCf1Interrupt(unsigned char pinNum) {  // Service Voltage and Current
 	g_vc_pulses++;
@@ -292,7 +294,7 @@ void BL0937_RunFrame()
 		char dbg[128];
 		snprintf(dbg, sizeof(dbg), "Voltage %f, current %f, power %f\n", final_v, final_c, final_p);
 		addLogAdv(LOG_INFO, LOG_FEATURE_ENERGYMETER, dbg);
-}
+	}
 #endif
 	BL_ProcessUpdate(final_v, final_c, final_p);
 
@@ -304,12 +306,11 @@ void BL0937_RunFrame()
 
 	//HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
 
-	if (secondsSkipped >= 10) {
+	if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
 		char jsonData[1024];
 		snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
 			final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
-		HTTPClient_Async_SendPostWithAuth("https://webhook.site/44fb5671-af7f-4455-85df-137ee9692e01", jsonData, "device0000000000", "nFy2i1u10eBdE8w7");
-		//https://api.solarbro.eu/devices/testDevice/states
+		HTTPClient_Async_SendPostWithAuth("https://api.solarbro.eu/devices/testDevice/states", jsonData, "device0000000000", "nFy2i1u10eBdE8w7");
 
 		secondsSkipped = 0;
 	}
