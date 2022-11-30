@@ -310,7 +310,8 @@ void BL0937_RunFrame()
 		char jsonData[1024];
 		snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
 			final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
-		HTTPClient_Async_SendPostWithAuth("https://api.solarbro.eu/devices/testDevice/states", jsonData, "device0000000000", "nFy2i1u10eBdE8w7");
+		HTTPClient_Async_SendPostWithAuth("https://webhook.site/#!/85ce01d4-dbe9-49ab-8c22-e33afc54c71f", jsonData, "device0000000000", "nFy2i1u10eBdE8w7");
+		// https://api.solarbro.eu/devices/testDevice/states
 
 		secondsSkipped = 0;
 	}
