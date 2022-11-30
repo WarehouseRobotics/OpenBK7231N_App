@@ -48,8 +48,6 @@ volatile uint32_t g_vc_pulses = 0;
 volatile uint32_t g_p_pulses = 0;
 static portTickType pulseStamp;
 
-#define DATA_SEND_PERIOD_SEC 600
-
 void HlwCf1Interrupt(unsigned char pinNum) {  // Service Voltage and Current
 	g_vc_pulses++;
 }
@@ -297,25 +295,17 @@ void BL0937_RunFrame()
 #endif
 	BL_ProcessUpdate(final_v, final_c, final_p);
 
-	// char url[256];
-	// &MacAddr=%02X:%02X:%02X:%02X:%02X:%02X
-	// , g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]
-	// snprintf(url, sizeof(url), "https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?Voltage=%.2f&Current=%.2f&Power=%.2f&UpTimeSec=%d&Drv=%s&Chipset=%s&DeviceName=%s",
-	// 	final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName);
-	// HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
+	//char url[256];
+	//&MacAddr=%02X:%02X:%02X:%02X:%02X:%02X
+	//, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]
+	//snprintf(url, sizeof(url), "https://webhook.site/9fae089d-ef93-4fa4-a472-092e78b9e164?Voltage=%.2f&Current=%.2f&Power=%.2f&UpTimeSec=%d&Drv=%s&Chipset=%s&DeviceName=%s",
+	//	final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName);
 
-	// static uint32_t secondsSkipped = DATA_SEND_PERIOD_SEC;
-	// if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
+	//HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
+
 	char jsonData[1024];
-	// snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
-	// 	final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
-	HTTPClient_Async_SendPostWithAuth("https://webhook.site/#!/85ce01d4-dbe9-49ab-8c22-e33afc54c71f", "test", "device0000000000", "nFy2i1u10eBdE8w7");
-	// https://api.solarbro.eu/devices/testDevice/states
-
-// 	secondsSkipped = 0;
-// }
-// else {
-// 	secondsSkipped++;
-// }
+	snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
+		final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
+	HTTPClient_Async_SendPostWithAuth("https://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f", jsonData, "testuser", "testpass");
 }
 
