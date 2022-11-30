@@ -49,7 +49,7 @@ volatile uint32_t g_p_pulses = 0;
 static portTickType pulseStamp;
 
 #define DATA_SEND_PERIOD_SEC 600
-uint32_t secondsSkipped;
+static uint32_t secondsSkipped;
 
 void HlwCf1Interrupt(unsigned char pinNum) {  // Service Voltage and Current
 	g_vc_pulses++;
