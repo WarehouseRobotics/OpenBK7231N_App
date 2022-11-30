@@ -48,6 +48,9 @@ volatile uint32_t g_vc_pulses = 0;
 volatile uint32_t g_p_pulses = 0;
 static portTickType pulseStamp;
 
+#define DATA_SEND_PERIOD_SEC 10
+uint32_t secondsSkipped = DATA_SEND_PERIOD_SEC;
+
 void HlwCf1Interrupt(unsigned char pinNum) {  // Service Voltage and Current
 	g_vc_pulses++;
 }
@@ -302,9 +305,17 @@ void BL0937_RunFrame()
 	//	final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName);
 	//HTTPClient_Async_SendGetWithAuth(url, "testuser", "testpass");
 
-	char jsonData[1024];
-	snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
-		final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
-	HTTPClient_Async_SendPostWithAuth("https://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f", jsonData, "device0000000000", "nFy2i1u10eBdE8w7");
+	if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
+		char jsonData[1024];
+		snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
+			final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
+		HTTPClient_Async_SendPostWithAuth("https://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f", jsonData, "device0000000000", "nFy2i1u10eBdE8w7");
+
+		secondsSkipped = 0;
+	}
+	else {
+		secondsSkipped++;
+	}
+
 }
 
