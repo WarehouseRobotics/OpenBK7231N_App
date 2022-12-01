@@ -1306,7 +1306,7 @@ int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* json_data,
 	url = strdup(url_in);
 #endif
 	if (url == 0) {
-		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPostWithAuth for %s, failed to alloc URL memory\r\n");
+		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPostWithAuth for %s, failed to alloc URL memory\r\n", url_in);
 		return 1;
 	}
 
@@ -1316,7 +1316,7 @@ int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* json_data,
 	request = (httprequest_t*)malloc(sizeof(httprequest_t));
 #endif
 	if (request == 0) {
-		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPostWithAuth for %s, failed to alloc request memory\r\n");
+		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPostWithAuth for %s, failed to alloc request memory\r\n", url_in);
 		return 1;
 	}
 
@@ -1329,8 +1329,18 @@ int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* json_data,
 	client = &request->client;
 	client_data = &request->client_data;
 
-	client_data->response_buf = 0;  //Sets a buffer to store the result.
-	client_data->response_buf_len = 0;  //Sets the buffer size.
+	// client_data->response_buf = 0;  //Sets a buffer to store the result.
+	// client_data->response_buf_len = 0;  //Sets the buffer size.
+	char* buf = NULL;
+	buf = pvPortMalloc(1024);
+	if (buf == NULL) {
+		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPostWithAuth for %s, failed to alloc response_buf memory\r\n", url_in);
+		return 1;
+	}
+	memset(buf, 0, sizeof(buf));
+	client_data->response_buf = buf;  //Sets a buffer to store the result.
+	client_data->response_buf_len = 1024;  //Sets the buffer size.
+
 	//HTTPClient_SetCustomHeader(client, "");  //Sets the custom header if needed.
 	httpclient_basic_auth(client, username, password);
 	client_data->post_buf = json_data;  //Sets the user data to be posted.
