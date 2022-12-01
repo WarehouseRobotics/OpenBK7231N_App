@@ -1337,7 +1337,7 @@ int HTTPClient_Async_SendPostWithAuth(const char* url_in, const char* json_data,
 	client_data->post_buf_len = strlen(json_data);  //Sets the post data length.
 	client_data->post_content_type = "application/json";  //Sets the content type.
 	request->data_callback = 0;
-	request->port = 80;//HTTP_PORT;
+	request->port = HTTPS_PORT; // 80;//HTTP_PORT;
 	request->url = url;
 	request->method = HTTPCLIENT_POST;
 	request->timeout = 10000;
