@@ -1241,14 +1241,24 @@ int HTTPClient_Async_SendGet(const char* url_in) {
 #define BUF_SIZE 1024
 
 int HTTPClient_Async_SendPost(const char* url, const char* body, const char* content_type, const char* username, const char* password) {
+	// it must be copied, but we can free it automatically later
+	char* url_copy = strdup(url);
+	if (url_copy == 0) {
+		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPost for %s, failed to alloc URL memory\r\n", url);
+		return 1;
+	}
+
 	httprequest_t* request = os_malloc(sizeof(httprequest_t));
 	if (request == 0) {
 		ADDLOG_ERROR(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPost for %s, failed to alloc request memory\r\n", url);
 		return 1;
 	}
 	request->flags |= HTTPREQUEST_FLAG_FREE_SELFONDONE;
+	request->flags |= HTTPREQUEST_FLAG_FREE_URLONDONE;
 	httpclient_t* client = &request->client;
 	httpclient_data_t* client_data = &request->client_data;
+
+	ADDLOG_INFO(LOG_FEATURE_HTTP_CLIENT, "HTTPClient_Async_SendPost for %s, sizeof(httprequest_t) == %i!\r\n", url, sizeof(httprequest_t));
 
 	// char* buf = NULL;
 	// buf = pvPortMalloc(BUF_SIZE);
@@ -1264,14 +1274,16 @@ int HTTPClient_Async_SendPost(const char* url, const char* body, const char* con
 	client_data->response_buf = 0;  //Sets a buffer to store the result.
 	client_data->response_buf_len = 0;  //Sets the buffer size.
 
+	httpclient_basic_auth(client, username, password);
+
 	client_data->post_buf = body;  //Sets the user data to be posted.
 	client_data->post_buf_len = strlen(body);  //Sets the post data length.
 	client_data->post_content_type = content_type;  //Sets the content type.
 	request->port = HTTPS_PORT;
-	request->url = url;
+	request->url = url_copy;
 	request->method = HTTPCLIENT_POST;
 	request->timeout = 10000;
-	// request->data_callback = mydatacallback;
+	request->data_callback = 0; //mydatacallback;
 
 	return HTTPClient_Async_SendGeneric(request);
 }
