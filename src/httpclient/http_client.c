@@ -1240,7 +1240,7 @@ int HTTPClient_Async_SendGet(const char* url_in) {
 
 #define BUF_SIZE 1024
 
-int HTTPClient_Async_SendPost(const char* url, const char* body, const char* content_type, const char* username, const char* password) {
+int HTTPClient_Async_SendPost(const char* url, const char* body, const char* content_type, const char* username, const char* password, char* respBuffer, int respBufferLen) {
 	// it must be copied, but we can free it automatically later
 	char* url_copy = strdup(url);
 	if (url_copy == 0) {
@@ -1271,8 +1271,8 @@ int HTTPClient_Async_SendPost(const char* url, const char* body, const char* con
 	// client_data->response_buf = buf;  //Sets a buffer to store the result.
 	// client_data->response_buf_len = BUF_SIZE;  //Sets the buffer size.
 
-	client_data->response_buf = 0;  //Sets a buffer to store the result.
-	client_data->response_buf_len = 0;  //Sets the buffer size.
+	client_data->response_buf = respBuffer;  //Sets a buffer to store the result.
+	client_data->response_buf_len = respBufferLen;  //Sets the buffer size.
 
 	httpclient_basic_auth(client, username, password);
 
