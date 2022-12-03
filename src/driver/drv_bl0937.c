@@ -313,7 +313,7 @@ void BL0937_RunFrame()
 			// 		HTTPClient_Async_SendPost("HTTPS://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f",
 			// 			jsonData, contentType, username, password, respBuffer, 1024);
 
-			HTTPClient_Async_SendGet("HTTPS://www.google.com/");
+			HTTPClient_Async_SendGet("HTTPS://www.alibaba.com/");
 
 			secondsSkipped = 0;
 		}
