@@ -48,11 +48,6 @@ volatile uint32_t g_vc_pulses = 0;
 volatile uint32_t g_p_pulses = 0;
 static portTickType pulseStamp;
 
-#define DATA_SEND_PERIOD_SEC 60
-#define FIRST_DATA_SEND_DELAY 10
-static bool dataSendingStarted = false;
-static uint32_t secondsSkipped;
-
 void HlwCf1Interrupt(unsigned char pinNum) {  // Service Voltage and Current
 	g_vc_pulses++;
 }
@@ -226,6 +221,11 @@ void BL0937_Init()
 	g_p_pulses = 0;
 	pulseStamp = xTaskGetTickCount();
 }
+
+// #define DATA_SEND_PERIOD_SEC 60
+// #define FIRST_DATA_SEND_DELAY 10
+// static bool dataSendingStarted = false;
+// static uint32_t secondsSkipped;
 
 void BL0937_RunFrame()
 {
