@@ -301,30 +301,30 @@ void BL0937_RunFrame()
 	BL_ProcessUpdate(final_v, final_c, final_p);
 
 	//HTTPS://api.solarbro.eu/devices/testDevice/states
-	static char jsonData[1024], respBuffer[1024];
-	static char* contentType = "application/json";
-	static char* username = "device0000000000";
-	static char* password = "nFy2i1u10eBdE8w7";
+	// static char jsonData[1024], respBuffer[1024];
+	// static char* contentType = "application/json";
+	// static char* username = "device0000000000";
+	// static char* password = "nFy2i1u10eBdE8w7";
 
-	if (dataSendingStarted) {
-		if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
-			snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
-				final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
-			HTTPClient_Async_SendPost("HTTPS://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f",
-				jsonData, contentType, username, password, respBuffer, 1024);
+	// if (dataSendingStarted) {
+	// 	if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
+	// 		snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
+	// 			final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
+	// 		HTTPClient_Async_SendPost("HTTPS://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f",
+	// 			jsonData, contentType, username, password, respBuffer, 1024);
 
-			secondsSkipped = 0;
-		}
-		else {
-			secondsSkipped++;
-		}
-	}
-	else {
-		if (Main_HasWiFiConnected()) {
-			secondsSkipped = DATA_SEND_PERIOD_SEC - FIRST_DATA_SEND_DELAY;
-			dataSendingStarted = true;
-		}
-	}
+	// 		secondsSkipped = 0;
+	// 	}
+	// 	else {
+	// 		secondsSkipped++;
+	// 	}
+	// }
+	// else {
+	// 	if (Main_HasWiFiConnected()) {
+	// 		secondsSkipped = DATA_SEND_PERIOD_SEC - FIRST_DATA_SEND_DELAY;
+	// 		dataSendingStarted = true;
+	// 	}
+	// }
 
 }
 
