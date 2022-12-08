@@ -150,7 +150,7 @@ extern "C" {
 	 */
 	int HTTPClient_Async_SendGeneric(httprequest_t* request);
 	int HTTPClient_Async_SendGet(const char* url_in);
-	int HTTPClient_Async_SendPost(const char* url_in, const char* body, const char* content_type);
+	int HTTPClient_Async_SendPost(const char* url_in, char* body, char* content_type);
 	void HTTPClient_SetCustomHeader(httpclient_t* client, const char* header);
 
 #ifdef __cplusplus

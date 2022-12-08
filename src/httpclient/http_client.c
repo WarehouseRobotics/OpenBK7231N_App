@@ -1238,7 +1238,7 @@ int HTTPClient_Async_SendGet(const char* url_in) {
 	return 0;
 }
 
-int HTTPClient_Async_SendPost(const char* url_in, const char* body, const char* content_type) {
+int HTTPClient_Async_SendPost(const char* url_in, char* body, char* content_type) {
 	httprequest_t* request;
 	httpclient_t* client;
 	httpclient_data_t* client_data;
@@ -1277,8 +1277,8 @@ int HTTPClient_Async_SendPost(const char* url_in, const char* body, const char* 
 	client_data->response_buf = 0;  //Sets a buffer to store the result.
 	client_data->response_buf_len = 0;  //Sets the buffer size.
 	HTTPClient_SetCustomHeader(client, "");  //Sets the custom header if needed.
-	client_data->post_buf = "";  //Sets the user data to be posted.
-	client_data->post_buf_len = 0;  //Sets the post data length.
+	client_data->post_buf = body;  //Sets the user data to be posted.
+	client_data->post_buf_len = strlen(body);  //Sets the post data length.
 	client_data->post_content_type = content_type; //"text/csv";  //Sets the content type.
 	request->data_callback = 0;
 	request->port = 80;//HTTP_PORT;
