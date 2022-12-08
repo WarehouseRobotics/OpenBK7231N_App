@@ -228,10 +228,10 @@ void BL0937_Init()
 static bool dataSendingStarted = false;
 static uint32_t secondsSkipped;
 
-void randBuf(uint8_t* buf, int size) {
-	for (int i = 0; i < size; i++)
-		buf[i] = rand() % 255;
-}
+// void randBuf(uint8_t* buf, int size) {
+// 	for (int i = 0; i < size; i++)
+// 		buf[i] = rand() % 255;
+// }
 
 void BL0937_RunFrame()
 {
@@ -307,49 +307,46 @@ void BL0937_RunFrame()
 	BL_ProcessUpdate(final_v, final_c, final_p);
 
 	//HTTPS://api.solarbro.eu/devices/testDevice/states
-	// static char jsonData[1024], respBuffer[1024];
-	// static char* contentType = "application/json";
-	// static char* username = "device0000000000";
-	// static char* password = "nFy2i1u10eBdE8w7";
+	static char jsonData[1024];
+	static char* contentType = "application/json";
+	static char* username = "device0000000000";
+	static char* password = "nFy2i1u10eBdE8w7";
 
-	// if (dataSendingStarted) {
-	// 	if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
-	// 		// 		snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X'}",
-	// 		// 			final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5]);
-	// 		// 		HTTPClient_Async_SendPost("HTTPS://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f",
-	// 		// 			jsonData, contentType, username, password, respBuffer, 1024);
+	if (dataSendingStarted) {
+		if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
+			snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X','wifiStrength':%d}",
+				final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5], HAL_GetWifiStrength());
+			HTTPClient_Async_SendPost("HTTP://64.225.66.88:4589/tick?device_id=123", jsonData, contentType, username, password);
 
-	// 		HTTPClient_Async_SendGet("HTTPS://www.alibaba.com/");
+			secondsSkipped = 0;
+		}
+		else {
+			secondsSkipped++;
+		}
+	}
+	else {
+		if (Main_HasWiFiConnected()) {
+			secondsSkipped = DATA_SEND_PERIOD_SEC - FIRST_DATA_SEND_DELAY;
+			dataSendingStarted = true;
+		}
+	}
 
-	// 		secondsSkipped = 0;
-	// 	}
-	// 	else {
-	// 		secondsSkipped++;
-	// 	}
-	// }
-	// else {
-	// 	if (Main_HasWiFiConnected()) {
-	// 		secondsSkipped = DATA_SEND_PERIOD_SEC - FIRST_DATA_SEND_DELAY;
-	// 		dataSendingStarted = true;
-	// 	}
-	// }
+	// uint8_t key[32];    /* Random, secret session key  */
+	// uint8_t nonce[24];    /* Use only once per key       */
+	// uint8_t plain_text[12] = "Lorem ipsum"; /* Secret message */
+	// uint8_t mac[16];    /* Message authentication code */
+	// uint8_t cipher_text[12];              /* Encrypted message */
 
-	uint8_t key[32];    /* Random, secret session key  */
-	uint8_t nonce[24];    /* Use only once per key       */
-	uint8_t plain_text[12] = "Lorem ipsum"; /* Secret message */
-	uint8_t mac[16];    /* Message authentication code */
-	uint8_t cipher_text[12];              /* Encrypted message */
+	// randBuf(key, 32); //arc4random_buf(key, 32);
+	// randBuf(nonce, 24); //arc4random_buf(nonce, 24);
+	// crypto_lock(mac, cipher_text, key, nonce, plain_text, sizeof(plain_text));
+	// /* Wipe secrets if they are no longer needed */
+	// // crypto_wipe(plain_text, 12);
+	// // crypto_wipe(key, 32);
+	// /* Transmit cipher_text, nonce, and mac over the network,
+	//  * store them in a file, etc.
+	//  */
 
-	randBuf(key, 32); //arc4random_buf(key, 32);
-	randBuf(nonce, 24); //arc4random_buf(nonce, 24);
-	crypto_lock(mac, cipher_text, key, nonce, plain_text, sizeof(plain_text));
-	/* Wipe secrets if they are no longer needed */
-	// crypto_wipe(plain_text, 12);
-	// crypto_wipe(key, 32);
-	/* Transmit cipher_text, nonce, and mac over the network,
-	 * store them in a file, etc.
-	 */
-
-	ADDLOG_INFO(LOG_FEATURE_GENERAL, "ENC TEST: %s\r\n", cipher_text);
+	// ADDLOG_INFO(LOG_FEATURE_GENERAL, "ENC TEST: %s\r\n", cipher_text);
 }
 
