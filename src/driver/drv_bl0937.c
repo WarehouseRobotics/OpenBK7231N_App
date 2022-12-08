@@ -223,7 +223,7 @@ void BL0937_Init()
 	pulseStamp = xTaskGetTickCount();
 }
 
-#define DATA_SEND_PERIOD_SEC 60
+#define DATA_SEND_PERIOD_SEC 600
 #define FIRST_DATA_SEND_DELAY 10
 static bool dataSendingStarted = false;
 static uint32_t secondsSkipped;
