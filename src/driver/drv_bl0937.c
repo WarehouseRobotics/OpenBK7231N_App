@@ -316,7 +316,8 @@ void BL0937_RunFrame()
 		if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
 			snprintf(jsonData, sizeof(jsonData), "{'voltage':%.2f,'current':%.2f,'power':%.2f,'uptime':%d,'driver':'%s','chipset':'%s','deviceName':'%s','macAddr':'%02X:%02X:%02X:%02X:%02X:%02X','wifiStrength':%d}",
 				final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5], HAL_GetWifiStrength());
-			HTTPClient_Async_SendPost("HTTP://64.225.66.88:4589/tick?device_id=123", jsonData, contentType, username, password);
+			//HTTPClient_Async_SendPost("HTTP://64.225.66.88:4589/tick?device_id=123", jsonData, contentType, username, password);
+			HTTPClient_Async_SendPost("https://webhook.site/85ce01d4-dbe9-49ab-8c22-e33afc54c71f", jsonData, contentType, username, password);
 
 			secondsSkipped = 0;
 		}
