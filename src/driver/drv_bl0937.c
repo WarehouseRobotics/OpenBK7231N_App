@@ -223,7 +223,7 @@ void BL0937_Init()
 	pulseStamp = xTaskGetTickCount();
 }
 
-#define DATA_SEND_PERIOD_SEC 600
+#define DATA_SEND_PERIOD_SEC 10
 #define FIRST_DATA_SEND_DELAY 10
 static bool dataSendingStarted = false;
 static uint32_t secondsSkipped;
@@ -313,9 +313,13 @@ void BL0937_RunFrame()
 
 	if (dataSendingStarted) {
 		if (secondsSkipped >= DATA_SEND_PERIOD_SEC) {
+			ADDLOG_INFO(LOG_FEATURE_GENERAL, "Data transfer start\r\n");
+
 			snprintf(jsonData, sizeof(jsonData), "{\"voltage\":%.2f,\"current\":%.2f,\"power\":%.2f,\"uptime\":%d,\"driver\":\"%s\",\"chipset\":\"%s\",\"deviceName\":\"%s\",\"macAddr\":\"%02X:%02X:%02X:%02X:%02X:%02X\",\"wifiStrength\":%d}",
 				final_v, final_c, final_p, Time_getUpTimeSeconds(), "BL0937", PLATFORM_MCU_NAME, g_cfg.longDeviceName, g_cfg.mac[0], g_cfg.mac[1], g_cfg.mac[2], g_cfg.mac[3], g_cfg.mac[4], g_cfg.mac[5], HAL_GetWifiStrength());
 			HTTPClient_Async_SendPost(uri, jsonData, contentType);
+
+			ADDLOG_INFO(LOG_FEATURE_GENERAL, "Data transfer end\r\n");
 
 			secondsSkipped = 0;
 		}
@@ -325,6 +329,8 @@ void BL0937_RunFrame()
 	}
 	else {
 		if (Main_HasWiFiConnected()) {
+			ADDLOG_INFO(LOG_FEATURE_GENERAL, "Starting periodic data transfer in %d seconds\r\n", FIRST_DATA_SEND_DELAY);
+
 			snprintf(uri, sizeof(uri), "HTTP://64.225.66.88:4589/tick?device_id=%s", g_cfg.longDeviceName);
 
 			secondsSkipped = DATA_SEND_PERIOD_SEC - FIRST_DATA_SEND_DELAY;
